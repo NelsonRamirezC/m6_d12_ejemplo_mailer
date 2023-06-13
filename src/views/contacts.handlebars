@@ -1,0 +1,75 @@
+<h1 class="text-center">Vista contactos.</h1>
+
+<section class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <form id="formContact">
+            <div class="mb-3">
+                <label
+                    for="exampleFormControlInput1"
+                    class="form-label"
+                >Email</label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="contactEmail"
+                    placeholder="name@example.com"
+                    name="email"
+                    value="correo@gmail.com"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label
+                    for="exampleFormControlTextarea1"
+                    class="form-label"
+                >Consulta</label>
+                <textarea
+                    class="form-control"
+                    id="contactConsulta"
+                    rows="4"
+                    name="consulta"
+                    required
+                ></textarea>
+            </div>
+            <input type="submit" class="btn btn-primary" />
+        </form>
+    </div>
+</section>
+
+<script>
+
+    let formContact = document.getElementById("formContact");
+    formContact.addEventListener("submit", (event) => { 
+        event.preventDefault();
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "email": contactEmail.value,
+            "consulta": contactConsulta.value
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("/api/contacts", requestOptions)
+        .then(response => {
+            if(response.status == 201){
+                return response.json()
+            }else
+            throw new Error("No se ha podido procesar la solicitud.")
+        })
+        .then(result => {
+            alert("Se ha enviado su solicitud, gracias por preferirnos.")
+        })
+        .catch(error => {
+            console.error('Error: ', error.message)
+        });
+            
+        })
+
+</script>
